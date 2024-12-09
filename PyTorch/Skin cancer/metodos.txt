@@ -1,0 +1,8 @@
+nn.Conv2d(Kernel_size, stride)
+nn.MaxPool2d(Kernel_size, stride)
+conv2d
+maxpool
+flatten
+linear
+relu
+linear
