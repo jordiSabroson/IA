@@ -122,4 +122,7 @@ for t in range(epochs):
     test_loop(test_dataloader, model, loss_fn)
 print("Done!")
 
+# Guardar el estado del modelo entrenado
+torch.save(model.state_dict(), "heart_model.pth")
+
 # Executar: CUDA_LAUNCH_BLOCKING=1 /home/iticbcn/Escritorio/UA/ex-basics/bin/python "/home/iticbcn/Escritorio/UA/PyTorch/Heart Disease/heart_disease_predict.py"

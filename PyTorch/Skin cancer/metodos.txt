@@ -6,3 +6,5 @@ flatten
 linear
 relu
 linear
+
+torchvision -> imagefolder

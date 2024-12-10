@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease</title>
+</head>
+<body>
+    <h1>Predicció de malaltia de cor</h1>
+    <h3>Introdueix les dades del teu cor per saber si tens una malaltia al cor o no</h3>
+    <form action="/enviar" method="post">
+        <label for="age">Edat</label>
+        <input type="number" step="any" id="age" name="age" required>
+
+        <br><br>
+
+        <label for="sex">Sexe</label>
+        <select name="sex" id="sex" required>
+            <option value="home">Home</option>
+            <option value="dona">Dona</option>
+        </select>
+
+        <br><br>
+
+        <label for="cp">Tipus de dolor al pit</label>
+        <select name="cp" id="cp" required>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        
+        <br><br>
+
+        <label for="trestbps">Pressió sangínea en descans</label>
+        <input type="number" step="any" id="trestbps" name="trestbps" required>
+
+        <br><br>
+
+        <label for="chol">Colesterol en miligrams per decilitre</label>
+        <input type="number" step="any" id="chol" name="chol" required>
+
+        <br><br>
+
+        <label for="fbs">Més de 120 mg/dl de sucre en sang en dejuni</label>
+        <select name="fbs" id="fbs" required>
+            <option value="0">No</option>
+            <option value="1">Si</option>
+        </select>
+        
+        <br><br>
+
+        <label for="restecg">Resultats del electrocardiograma en descans</label>
+        <select name="restecg" id="restecg" required>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+        
+        <br><br>
+
+        <label for="thalach">Freqüència cardíaca màxima aconseguida</label>
+        <input type="number" step="any" id="thalach" name="thalach" required>
+
+        <br><br>
+
+        <label for="exang">Angines induïda per l'exercici</label>
+        <select name="exang" id="exang" required>
+            <option value="0">Si</option>
+            <option value="1">No</option>
+        </select>
+
+        <br><br>
+
+        <label for="oldpeak">Depressió del ST induïda per l'exercici en relació amb el repòs</label>
+        <input type="number" step="any" id="oldpeak" name="oldpeak" required>
+
+        <br><br>
+
+        <label for="slope">El pendent del segment ST de l'exercici màxim</label>
+        <select name="slope" id="slope" required>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+
+        <br><br>
+
+        <label for="ca">El pendent del segment ST de l'exercici màxim</label>
+        <select name="ca" id="ca" required>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+
+        <br><br>
+
+        <label for="thal">1 = normal; 2 = defecte fixat; 3 = defecte reversible</label>
+        <select name="thal" id="thal" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
