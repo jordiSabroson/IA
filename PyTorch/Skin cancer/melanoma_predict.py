@@ -51,7 +51,7 @@ optimizer = optim.Adam(model.parameters(),lr = 0.001)
 
 def train_model(model,train_dataloader,criterion,optimizer):
     model.train()
-    size = len(train_dataloader)
+    size = len(train_dataloader.dataset)
     running_loss = 0.0
     for batch, (inputs, labels) in enumerate(train_dataloader):
         inputs,labels = inputs.to(device),labels.to(device)
@@ -64,9 +64,10 @@ def train_model(model,train_dataloader,criterion,optimizer):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        
+        running_loss += loss.item()
 
         if batch % 10 == 0:
-            running_loss += loss.item()
             current = batch * bs + len(inputs)
             print(f'Loss: {running_loss/size:.4f} [{current:>5d}/{size:>5d}]')
             

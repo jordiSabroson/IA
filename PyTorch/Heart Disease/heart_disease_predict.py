@@ -85,9 +85,10 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
         optimizer.zero_grad()
-
-        if batch % 100 == 0:
-            loss, current = loss.item(), batch * bs + len(X)
+        loss += loss.item()
+        
+        if batch % 10 == 0:
+            current = batch * bs + len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
