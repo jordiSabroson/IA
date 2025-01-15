@@ -24,13 +24,29 @@ POLYGON = np.array([
     [0,646.8012444830329]
 ], dtype=np.int32)
 
+CLASSES = [0] # ID dels elements que volem que es detectin. El 0 correspon a les persones
+
+# Aquesta linea representa una frontera on es contabilitzen els elements que la creuen tant d'entrada com de sortida
+LINE_1_START = sv.Point(1, 659)
+LINE_1_END = sv.Point(479, 677)
+
+LINE_ZONE_1 = sv.LineZone(
+    start=LINE_1_START,
+    end=LINE_1_END,
+    triggering_anchors=(sv.Position.BOTTOM_CENTER,)
+)
 
 model = YOLO("yolo11n.pt") # Importem el model YOLO 11 nano d'ultralytics
 # print(model.names) per veure els elements que pot detectar Yolo
+tracker = sv.ByteTrack(minimum_consecutive_frames=3)
+tracker.reset()
 
 polygon_zone = sv.PolygonZone(polygon=POLYGON, triggering_anchors=(sv.Position.CENTER,))
 
 box_annotator = sv.BoxAnnotator() # Annotator que farem servir per resaltar els elements detectats
+label_annotator = sv.LabelAnnotator(text_color=sv.Color.BLACK, text_scale=0.3) # Etiqueta que apareixera sobre l'element detectat
+trace_annotator = sv.TraceAnnotator(trace_length=60) # Annotator que mostra el camí recorregut per l'element
+line_zone_annotator = sv.LineZoneAnnotator()
 
 def main(video_file_path):
     frame_generator = sv.get_video_frames_generator(source_path=video_file_path)
@@ -53,7 +69,16 @@ def main(video_file_path):
 
         detections = sv.Detections.from_ultralytics(result)
         detections = detections[polygon_zone.trigger(detections)] #Fem que les deteccions estiguin dins del poligon
-        detections = detections[detections.class_id == 0] # Amb el model.names veiem que l'id 0 són les persones
+        detections = detections[np.isin(detections.class_id, CLASSES)] # Detectem només les classes especificades
+        detections = tracker.update_with_detections(detections) # Li donem un tracker id a l'element detectat
+
+        labels = [ # Per mostrar el tracker id com a etiqueta
+            f"#{tracker_id}"
+            for tracker_id
+            in detections.tracker_id
+        ] 
+
+        LINE_ZONE_1.trigger(detections=detections) # Fem el trigger per a que es contabilitzin els elements que creuen la zona
 
         annotated_frame = resized_frame.copy() # Còpia del frame original per anotar la còpia i no l'original
 
@@ -68,8 +93,20 @@ def main(video_file_path):
             scene=annotated_frame,
             detections=detections
         )
+        annotated_frame = label_annotator.annotate(
+            scene=annotated_frame,
+            detections=detections,
+            labels=labels
+        )
+        annotated_frame = trace_annotator.annotate(
+            scene=annotated_frame,
+            detections=detections
+        )
+        annotated_frame = line_zone_annotator.annotate(
+            annotated_frame, line_counter=LINE_ZONE_1
+        )
 
-        time.sleep(0.5)
+        # time.sleep(0.5)
         cv2.imshow("Processed video", annotated_frame)
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
