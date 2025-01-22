@@ -74,7 +74,7 @@ def tokenitzar_loop(tokens, diccionari, num_tokens, longitut=2, umbral=3, index_
 
     return tokens_actualitzats, diccionari_actualitzat
 
-with open("dracula_test.txt", "r", encoding="utf-8") as file: # Carregar el text, en aquest cas serà la novel·la de Dràcula
+with open("data/dracula_test.txt", "r", encoding="utf-8") as file: # Carregar el text, en aquest cas serà la novel·la de Dràcula
     text = file.read()
 
 text_normalitzat = [normalitzar_char(char) for char in text if normalitzar_char(char)] # Normalitzem els caràcters de la novel·la i eliminem els espais en blanc
