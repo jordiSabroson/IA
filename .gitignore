@@ -1,3 +1,7 @@
 /ex-basics
 /PyTorch/Skin cancer/data
 /PyTorch/Audio classification/data
+/Models de llenguatge/BERT model/bert-sentiment-model
+/Models de llenguatge/BERT model/bert-sentiment-tokenizer
+/Models de llenguatge/Custom GPT/model.pth
+/Models de llenguatge/LSTM/model.pth

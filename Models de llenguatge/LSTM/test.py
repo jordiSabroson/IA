@@ -43,7 +43,7 @@ def predict_sentiment(review):
     return predicted.item()
 
 if __name__ == "__main__":
-    csv_path = "data/IMDB_Dataset.csv"
+    csv_path = "../data/IMDB_Dataset.csv"
     reviews, labels = load_reviews_from_csv(csv_path)
 
     correct = 0
