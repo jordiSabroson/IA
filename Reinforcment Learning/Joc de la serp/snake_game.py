@@ -6,7 +6,6 @@ import numpy as np
 
 pygame.init()
 font = pygame.font.Font('arial.ttf', 25)
-#font = pygame.font.SysFont('arial', 25)
 
 class Direction(Enum):
     RIGHT = 1
@@ -61,28 +60,31 @@ class SnakeGame:
         
     def play_step(self, action):
         self.steps += 1
-
-        # 1. collect user input
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        # 2. move
-        self._move(action) # update the head
+        prev_distance = np.linalg.norm(np.array([self.food.x, self.food.y]) - np.array([self.head.x, self.head.y]))
+        
+        # 1. Moure la serp
+        self._move(action)
         self.snake.insert(0, self.head)
         
+        # 2. Verificar col·lisions
         reward = 0
-        # 3. check if game over
         game_over = False
         if self.is_collision() or self.steps > len(self.snake) * 40:
-            reward = -1
+            reward = -20
             game_over = True
             return  reward, game_over, self.score
             
-        # 4. place new food or just move
+        # 3. Calcular la nova distància a la poma
+        new_distance = np.linalg.norm(np.array([self.food.x, self.food.y]) - np.array([self.head.x, self.head.y]))
+
+        # 4. Recompensar si s'apropa a la poma, castigar si s'allunya
+        if new_distance < prev_distance:
+            reward += 2  # Direcció correcta
+        else:
+            reward -= 1  # S'ha allunyat
+
         if self.head == self.food:
-            reward = 1
+            reward = 15
             self.score += 1
             self._place_food()
         else:
@@ -124,9 +126,9 @@ class SnakeGame:
         directions = [ Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP ]
         index = directions.index(self.direction)
 
-        if np.array_equal(action, [0, 1, 0]):
+        if action == 1:
             index = (index -1) % 4
-        elif np.array_equal(action, [0, 0, 1]):
+        elif action == 2:
             index = (index + 1) % 4
         
         self.direction = directions[index]

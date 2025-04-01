@@ -5,21 +5,32 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 class Network(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
+    def __init__(self, input_size, hidden_size, output_size, freeze=False):
         super().__init__()
-        self.linear1 = nn.Linear(input_size, hidden_size)
-        self.linear2 = nn.Linear(hidden_size, output_size)
+        self.network = nn.Sequential(
+            nn.Linear(input_size, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, output_size)
+        )
+
+        if freeze:
+            self._freeze()
+    
+        self.device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.mps.is_available() else 'cpu'
+        self.to(self.device)
 
     def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = self.linear2(x)
-        return x
+        return self.network(x)
     
     def save(self, filename='model.pth'):
         if not os.path.exists('./model'):
             os.makedirs('model')
         filename = os.path.join('./model', filename)
         torch.save(self.state_dict(), filename)
+
+    def _freeze(self):
+        for p in self.network.parameters():
+            p.requires_grad = False
 
 class QTrainer:
     def __init__(self, model, lr, gamma):
