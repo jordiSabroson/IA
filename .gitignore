@@ -10,3 +10,5 @@
 Projecte/Midi Dataset Clean
 Projecte/lmd_matched
 Projecte/lastfm_train
+Projecte/data/processed_training_data.json
+Projecte/data/raw_chords_dataset.json
